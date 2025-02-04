@@ -45,5 +45,5 @@ The system responds with XML format in compliance with Amazon S3's specification
    cd triple-s
 3. Initialize the Go module:
    go mod tidy
-4.Build the project:
+4. Build the project:
    go build -o triple-s .
