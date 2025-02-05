@@ -48,23 +48,24 @@ The system responds with XML format in compliance with Amazon S3's specification
 4. Build the project:
    go build -o triple-s .
    
-Usage
+##Usage
 To run the server, use the following command:
+
 ./triple-s -port <port-number> -dir <storage-directory>
 
-Where:
+##Where:
 -port <port-number> specifies the port the server will listen on (default: 8080).
 -dir <storage-directory> specifies the path to the directory where the buckets and objects will be stored.
 
-Example:
+##Example:
 To run the server on port 8080 with the storage directory at /path/to/storage:
 ./triple-s -port 8080 -dir /path/to/storage
 
-Show help:
+##Show help:
 ./triple-s --help
 This will display the available options for configuring the server.
 
-API Endpoints
+#API Endpoints
 Bucket Management
 
 1. Create a Bucket:
@@ -83,7 +84,7 @@ HTTP Method: DELETE
 Endpoint: /:{BucketName}
 Response: 204 No Content if successful, error message otherwise.
 
-Object Operations
+#Object Operations
 1. Upload a New Object:
 HTTP Method: PUT
 Endpoint: /:{BucketName}/{ObjectKey}
@@ -100,7 +101,7 @@ HTTP Method: DELETE
 Endpoint: /:{BucketName}/{ObjectKey}
 Response: 204 No Content on success.
 
-Directory Structure
+#Directory Structure
 The project stores data in a data/ directory. The structure is as follows:
 /data
   /{bucket-name}
@@ -111,14 +112,14 @@ The project stores data in a data/ directory. The structure is as follows:
 The objects.csv file stores metadata for objects, including their keys, sizes, and content types.
 The buckets.csv file stores metadata for buckets, including names, creation times, and modification times.
 
-Error Handling
+#Error Handling
 The server handles errors gracefully and returns appropriate HTTP status codes:
 400 Bad Request: Invalid bucket or object name.
 404 Not Found: Bucket or object does not exist.
 409 Conflict: Bucket already exists or bucket is not empty when trying to delete.
 500 Internal Server Error: Server errors (e.g., permission issues, file system errors).
 
-Metadata Storage
+#Metadata Storage
 Bucket Metadata (buckets.csv)
 Each line represents a bucket:
 BucketName,CreationTime,LastModifiedTime,Status
@@ -127,7 +128,8 @@ Object Metadata (objects.csv)
 Each line represents an object within a bucket:
 ObjectKey,Size,ContentType,LastModified
 
-Examples
+#Examples
+
 Example 1: Create a Bucket
 Request:
 PUT /photos
