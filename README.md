@@ -47,3 +47,109 @@ The system responds with XML format in compliance with Amazon S3's specification
    go mod tidy
 4. Build the project:
    go build -o triple-s .
+   
+Usage
+To run the server, use the following command:
+./triple-s -port <port-number> -dir <storage-directory>
+
+Where:
+-port <port-number> specifies the port the server will listen on (default: 8080).
+-dir <storage-directory> specifies the path to the directory where the buckets and objects will be stored.
+
+Example:
+To run the server on port 8080 with the storage directory at /path/to/storage:
+./triple-s -port 8080 -dir /path/to/storage
+
+Show help:
+./triple-s --help
+This will display the available options for configuring the server.
+
+API Endpoints
+Bucket Management
+
+1. Create a Bucket:
+HTTP Method: PUT
+Endpoint: /:{BucketName}
+Request Body: Empty
+Response: 200 OK on success or error message.
+List All Buckets:
+
+2. HTTP Method: GET
+Endpoint: /
+Response: XML list of all buckets.
+
+3. Delete a Bucket:
+HTTP Method: DELETE
+Endpoint: /:{BucketName}
+Response: 204 No Content if successful, error message otherwise.
+
+Object Operations
+1. Upload a New Object:
+HTTP Method: PUT
+Endpoint: /:{BucketName}/{ObjectKey}
+Request Body: Binary content (file).
+Response: 200 OK on success.
+
+2. Retrieve an Object:
+HTTP Method: GET
+Endpoint: /:{BucketName}/{ObjectKey}
+Response: Binary content of the object, appropriate MIME type.
+
+3. Delete an Object:
+HTTP Method: DELETE
+Endpoint: /:{BucketName}/{ObjectKey}
+Response: 204 No Content on success.
+
+Directory Structure
+The project stores data in a data/ directory. The structure is as follows:
+/data
+  /{bucket-name}
+    /objects.csv         # Metadata of objects in the bucket
+    /{object-key}        # Stored object (file)
+  /buckets.csv           # Metadata of all buckets
+
+The objects.csv file stores metadata for objects, including their keys, sizes, and content types.
+The buckets.csv file stores metadata for buckets, including names, creation times, and modification times.
+
+Error Handling
+The server handles errors gracefully and returns appropriate HTTP status codes:
+400 Bad Request: Invalid bucket or object name.
+404 Not Found: Bucket or object does not exist.
+409 Conflict: Bucket already exists or bucket is not empty when trying to delete.
+500 Internal Server Error: Server errors (e.g., permission issues, file system errors).
+
+Metadata Storage
+Bucket Metadata (buckets.csv)
+Each line represents a bucket:
+BucketName,CreationTime,LastModifiedTime,Status
+
+Object Metadata (objects.csv)
+Each line represents an object within a bucket:
+ObjectKey,Size,ContentType,LastModified
+
+Examples
+Example 1: Create a Bucket
+Request:
+PUT /photos
+Response:
+<Bucket>
+  <Name>photos</Name>
+  <CreationDate>2025-02-05T12:00:00Z</CreationDate>
+</Bucket>
+
+Example 2: Upload an Object
+Request:
+PUT /photos/sunset.png
+Response:
+<Object>
+  <Key>sunset.png</Key>
+  <Size>1024</Size>
+  <ContentType>image/png</ContentType>
+  <LastModified>2025-02-05T12:00:00Z</LastModified>
+</Object>
+
+Example 3: Delete an Object
+Request:
+DELETE /photos/sunset.png
+Response:
+<Status>204 No Content</Status>
